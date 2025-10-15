@@ -16,26 +16,33 @@ function buttonClickEffect(button) {
     }
 }
 
-// פונקציה להצגת הודעות למשתמש
-function showMessage(message, type = 'info') {
-    // ניתן להוסיף הודעות למשתמש
+// פונקציה להצגת הודעות למשתמש (גרסה מפושטת)
+function showControlMessage(message, type = 'info') {
     console.log(`[${type.toUpperCase()}] ${message}`);
     
-    // אפשרות להוסיף הודעות למשתמש בממשק
-    const messageElement = document.createElement('div');
-    messageElement.className = `message ${type}`;
-    messageElement.textContent = message;
-    
-    // הוספת ההודעה לדף
-    document.body.appendChild(messageElement);
-    
-    // הסרת ההודעה לאחר 3 שניות
-    setTimeout(() => {
-        messageElement.classList.add('fade-out');
+    // בדיקה אם קיימת פונקציית showMessage מקובץ player.js
+    if (typeof window.showMessage === 'function') {
+        window.showMessage(message);
+    } else {
+        // גיבוי במקרה שהפונקציה לא זמינה
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${type}`;
+        messageElement.textContent = message;
+        messageElement.style.cssText = `
+            position: fixed; top: 20px; right: 20px; 
+            padding: 15px 25px; border-radius: 5px; 
+            color: white; font-weight: bold; z-index: 1000;
+            background-color: #2196F3;
+        `;
+        
+        document.body.appendChild(messageElement);
+        
         setTimeout(() => {
-            document.body.removeChild(messageElement);
-        }, 500);
-    }, 3000);
+            if (document.body.contains(messageElement)) {
+                document.body.removeChild(messageElement);
+            }
+        }, 3000);
+    }
 }
 
 // פונקציה לטעינת סגנונות להודעות
@@ -157,4 +164,4 @@ if (document.readyState === 'loading') {
 }
 
 // ייצוא פונקציות לשימוש חיצוני
-window.showMessage = showMessage;
+window.showControlMessage = showControlMessage;

@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎶 נגן שירים לרכב 🚗</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        #error-message {
+            display: none;
+            color: #ff4444;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="music-player">
@@ -25,6 +37,7 @@
         </div>
 
         <div class="playlist-name" id="playlistName">🎵 טוען פלייליסט...</div>
+        <div id="error-message"></div>
 
         <button class="back-btn" onclick="buttonClickEffect(this); goBack()">🔙 חזרה לדף הראשי</button>
     </div>

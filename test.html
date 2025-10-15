@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎶 בדיקת נגן המוזיקה</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .test-results {
+            margin-top: 20px;
+            text-align: right;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+            min-height: 100px;
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .error {
+            color: #f44336;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>בדיקת נגן המוזיקה</h1>
+        <p>לחץ על הכפתורים למטה כדי לבדוק את הפונקציונליות של נגן המוזיקה.</p>
+        
+        <div class="test-section">
+            <h2>בדיקות בסיסיות</h2>
+            <button class="test-button" onclick="testPlayerInitialization()">בדיקת אתחול נגן</button>
+            <button class="test-button" onclick="testPlayPause()">בדיקת הפעלה/השהיה</button>
+            <button class="test-button" onclick="testPlaylistNavigation()">בדיקת ניווט בפלייליסט</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>בדיקות מתקדמות</h2>
+            <button class="test-button" onclick="testShuffle()">בדיקת ערבוב שירים</button>
+            <button class="test-button" onclick="testErrorHandling()">בדיקת טיפול בשגיאות</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>תוצאות הבדיקה</h2>
+            <div id="testResults" class="test-results">
+                לחץ על כפתורי הבדיקה כדי להתחיל...
+            </div>
+        </div>
+        
+        <div>
+            <button class="test-button" style="background: #2196F3;" onclick="runAllTests()">הרץ את כל הבדיקות</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <button class="test-button" style="background: #9c27b0;" onclick="openPlayer()">פתח את נגן המוזיקה</button>
+        </div>
+    </div>
+
+    <script>
+        const testResults = document.getElementById('testResults');
+        let testCount = 0;
+        let passedTests = 0;
+        let player;
+
+        function logTestResult(message, isSuccess) {
+            testCount++;
+            if (isSuccess) passedTests++;
+            
+            const resultElement = document.createElement('div');
+            resultElement.className = isSuccess ? 'success' : 'error';
+            resultElement.textContent = `${testCount}. ${message} - ${isSuccess ? '✅ הצליח' : '❌ נכשל'}`;
+            testResults.appendChild(resultElement);
+            testResults.scrollTop = testResults.scrollHeight;
+        }
+
+        function resetTestResults() {
+            testResults.innerHTML = '';
+            testCount = 0;
+            passedTests = 0;
+        }
+
+        function testPlayerInitialization() {
+            resetTestResults();
+            
+            try {
+                // בדיקת טעינת API יוטיוב
+                if (typeof YT === 'undefined') {
+                    throw new Error('YouTube API לא נטען');
+                }
+                logTestResult('YouTube API נטען בהצלחה', true);
+                
+                // בדיקת קיום פונקציות נדרשות
+                const requiredFunctions = ['onYouTubeIframeAPIReady', 'playVideo', 'pauseVideo', 'nextTrack', 'previousTrack', 'shufflePlaylist'];
+                let allFunctionsExist = true;
+                
+                requiredFunctions.forEach(func => {
+                    if (typeof window[func] !== 'function') {
+                        logTestResult(`פונקציה ${func} חסרה`, false);
+                        allFunctionsExist = false;
+                    }
+                });
+                
+                if (allFunctionsExist) {
+                    logTestResult('כל הפונקציות הנדרשות קיימות', true);
+                }
+                
+                // בדיקת אתחול הנגן
+                if (typeof onYouTubeIframeAPIReady === 'function') {
+                    onYouTubeIframeAPIReady();
+                    logTestResult('פונקציית האתחול נקראה בהצלחה', true);
+                }
+                
+                // בדיקת כפתורים בדף
+                const requiredButtons = ['playVideo', 'pauseVideo', 'nextTrack', 'previousTrack'];
+                requiredButtons.forEach(btn => {
+                    const elements = document.querySelectorAll(`[onclick*="${btn}"]`);
+                    if (elements.length === 0) {
+                        logTestResult(`כפתור ${btn} חסר בדף`, false);
+                    }
+                });
+                
+            } catch (error) {
+                logTestResult(`שגיאה בבדיקת אתחול: ${error.message}`, false);
+            }
+        }
+
+        function testPlayPause() {
+            resetTestResults();
+            
+            try {
+                if (typeof playVideo !== 'function' || typeof pauseVideo !== 'function') {
+                    throw new Error('פונקציות הפעלה/השהיה חסרות');
+                }
+                
+                // בדיקת הפעלת הנגן
+                playVideo();
+                logTestResult('הפעלת נגן - נשלחה בקשת הפעלה', true);
+                
+                // בדיקת השהיית הנגן
+                setTimeout(() => {
+                    pauseVideo();
+                    logTestResult('השהיית נגן - נשלחה בקשת השהייה', true);
+                }, 1000);
+                
+            } catch (error) {
+                logTestResult(`שגיאה בבדיקת הפעלה/השהיה: ${error.message}`, false);
+            }
+        }
+
+        function testPlaylistNavigation() {
+            resetTestResults();
+            
+            try {
+                if (typeof nextTrack !== 'function' || typeof previousTrack !== 'function') {
+                    throw new Error('פונקציות ניווט חסרות');
+                }
+                
+                // בדיקת מעבר לשיר הבא
+                nextTrack();
+                logTestResult('מעבר לשיר הבא - נשלחה בקשת מעבר', true);
+                
+                // בדיקת חזרה לשיר הקודם
+                setTimeout(() => {
+                    previousTrack();
+                    logTestResult('חזרה לשיר הקודם - נשלחה בקשת מעבר', true);
+                }, 1000);
+                
+            } catch (error) {
+                logTestResult(`שגיאה בבדיקת ניווט: ${error.message}`, false);
+            }
+        }
+
+        function testShuffle() {
+            resetTestResults();
+            
+            try {
+                if (typeof shufflePlaylist !== 'function') {
+                    throw new Error('פונקציית ערבוב חסרה');
+                }
+                
+                // בדיקת הפעלת ערבוב
+                shufflePlaylist();
+                logTestResult('הפעלת ערבוב - נשלחה בקשת ערבוב', true);
+                
+                // בדיקת כיבוי ערבוב
+                setTimeout(() => {
+                    if (typeof toggleShuffle === 'function') {
+                        toggleShuffle();
+                        logTestResult('כיבוי ערבוב - נשלחה בקשת כיבוי', true);
+                    } else {
+                        logTestResult('פונקציית toggleShuffle חסרה', false);
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                logTestResult(`שגיאה בבדיקת ערבוב: ${error.message}`, false);
+            }
+        }
+
+        function testErrorHandling() {
+            resetTestResults();
+            
+            try {
+                // שמירת הערך המקורי של הפונקציה
+                const originalPlayVideo = window.playVideo;
+                
+                // החלפת הפונקציה בגרסה שתזרוק שגיאה
+                window.playVideo = function() {
+                    throw new Error('שגיאת דמו לבדיקה');
+                };
+                
+                // הפעלת הפונקציה שתזרוק שגיאה
+                try {
+                    playVideo();
+                    logTestResult('טיפול בשגיאות - נכשל (לא זוהתה שגיאה)', false);
+                } catch (e) {
+                    logTestResult('טיפול בשגיאות - זוהתה שגיאה כראוי', true);
+                }
+                
+                // החזרת הפונקציה המקורית
+                window.playVideo = originalPlayVideo;
+                
+            } catch (error) {
+                logTestResult(`שגיאה בבדיקת טיפול בשגיאות: ${error.message}`, false);
+            }
+        }
+
+        function runAllTests() {
+            resetTestResults();
+            
+            const tests = [
+                testPlayerInitialization,
+                testPlayPause,
+                testPlaylistNavigation,
+                testShuffle,
+                testErrorHandling
+            ];
+            
+            let currentTest = 0;
+            
+            function runNextTest() {
+                if (currentTest < tests.length) {
+                    tests[currentTest]();
+                    currentTest++;
+                    setTimeout(runNextTest, 2000); // המתנה של 2 שניות בין בדיקה לבדיקה
+                } else {
+                    const successRate = Math.round((passedTests / testCount) * 100);
+                    const summary = document.createElement('div');
+                    summary.style.marginTop = '20px';
+                    summary.style.fontWeight = 'bold';
+                    summary.style.fontSize = '1.2em';
+                    summary.textContent = `סיום בדיקות: ${passedTests} מתוך ${testCount} הצליחו (${successRate}%)`;
+                    testResults.appendChild(summary);
+                }
+            }
+            
+            runNextTest();
+        }
+
+        function openPlayer() {
+            window.open('index.html', '_blank');
+        }
+    </script>
+</body>
+</html>

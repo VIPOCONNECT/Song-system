@@ -9,7 +9,7 @@ const playlists = [
         id: "PLy-VLzLFflkGbbgRpL_oiUzmtV89yegEm" 
     },
     { 
-ame: "🎵 פלייליסט 3 - מוזיקה מרגיעה 🎵", 
+        name: "🎵 פלייליסט 3 - מוזיקה מרגיעה 🎵", 
         id: "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj" 
     },
     { 
@@ -18,72 +18,20 @@ ame: "🎵 פלייליסט 3 - מוזיקה מרגיעה 🎵",
     }
 ];
 
-// משתנים גלובליים
-let currentPlaylistIndex = 0;
-let isShuffle = false;
+// המשתנים הגלובליים מוגדרים בקובץ player.js
 
 // פונקציה לקבלת הפלייליסט הנוכחי
 function getCurrentPlaylist() {
     return playlists[currentPlaylistIndex];
 }
 
-// פונקציה לעדכון שם הפלייליסט בתצוגה
-function updatePlaylistName() {
-    const playlistNameElement = document.getElementById('playlistName');
-    if (playlistNameElement) {
-        playlistNameElement.textContent = playlists[currentPlaylistIndex].name;
-    }
-}
+// פונקציות אלו מוגדרות בקובץ player.js כדי למנוע כפילות
 
-// פונקציה לעדכון מצב הכפתורים
-function updateButtonStates() {
-    const shuffleBtn = document.getElementById('shuffleBtn');
-    if (shuffleBtn) {
-        if (isShuffle) {
-            shuffleBtn.classList.add('active');
-        } else {
-            shuffleBtn.classList.remove('active');
-        }
-    }
-}
-
-// פונקציה לטעינת פלייליסט חדש
-function loadPlaylist(index) {
-    if (index >= 0 && index < playlists.length) {
-        currentPlaylistIndex = index;
-        updatePlaylistName();
-        updateButtonStates();
-        
-        if (window.player) {
-            window.player.loadPlaylist({
-                list: playlists[currentPlaylistIndex].id,
-                listType: 'playlist'
-            });
-            
-            if (isShuffle) {
-                setTimeout(shufflePlaylist, 1000);
-            }
-        }
-    }
-}
-
-// פונקציה לטעינת הפלייליסט הבא
-function nextPlaylist() {
-    const nextIndex = (currentPlaylistIndex + 1) % playlists.length;
-    loadPlaylist(nextIndex);
-}
-
-// פונקציה לטעינת הפלייליסט הקודם
-function previousPlaylist() {
-    const prevIndex = (currentPlaylistIndex - 1 + playlists.length) % playlists.length;
-    loadPlaylist(prevIndex);
-}
-
-// אתחול אירועים
+// אתחול אירועים - הפונקציות מוגדרות בקובץ player.js
 function initPlaylistEvents() {
     document.addEventListener('DOMContentLoaded', () => {
-        updatePlaylistName();
-        updateButtonStates();
+        console.log('פלייליסטים נטענו בהצלחה');
+        // הפונקציות updatePlaylistName ו-updateButtonStates מוגדרות בקובץ player.js
     });
 }
 
