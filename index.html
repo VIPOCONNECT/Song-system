@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎶 נגן שירים לרכב 🚗</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="music-player">
+        <h2>🎶 נגן מוזיקה 🚗</h2>
+        <div id="player" class="video-frame"></div>
+
+        <div class="control-buttons">
+            <button class="control-btn" onclick="buttonClickEffect(this); previousTrack()">⏮</button>
+            <button class="control-btn" onclick="buttonClickEffect(this); playVideo()">▶</button>
+            <button class="control-btn" onclick="buttonClickEffect(this); pauseVideo()">⏸</button>
+            <button class="control-btn" onclick="buttonClickEffect(this); nextTrack()">⏭</button>
+            <button id="shuffleBtn" class="control-btn shuffle-btn" onclick="buttonClickEffect(this); toggleShuffle()">🔀 ערבוב</button>
+        </div>
+
+        <div class="control-buttons">
+            <button class="control-btn" onclick="buttonClickEffect(this); previousPlaylist()">⬅ פלייליסט קודם</button>
+            <button class="control-btn" onclick="buttonClickEffect(this); nextPlaylist()">➡ פלייליסט הבא</button>
+        </div>
+
+        <div class="playlist-name" id="playlistName">🎵 פלייליסט 1 - שירים ישראלים 🇮🇱</div>
+
+        <button class="back-btn" onclick="buttonClickEffect(this); goBack()">🔙 חזרה לדף הראשי</button>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="js/player.js"></script>
+    <script src="js/playlists.js"></script>
+    <script src="js/controls.js"></script>
+</body>
+</html>
