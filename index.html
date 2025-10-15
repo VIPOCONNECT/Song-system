@@ -24,14 +24,29 @@
             <button class="control-btn" onclick="buttonClickEffect(this); nextPlaylist()">➡ פלייליסט הבא</button>
         </div>
 
-        <div class="playlist-name" id="playlistName">🎵 פלייליסט 1 - שירים ישראלים 🇮🇱</div>
+        <div class="playlist-name" id="playlistName">🎵 טוען פלייליסט...</div>
 
         <button class="back-btn" onclick="buttonClickEffect(this); goBack()">🔙 חזרה לדף הראשי</button>
     </div>
 
+    <!-- טעינת הסקריפטים בסוף הדף לטעינה מהירה יותר -->
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="js/player.js"></script>
     <script src="js/playlists.js"></script>
+    <script src="js/player.js"></script>
     <script src="js/controls.js"></script>
+    
+    <script>
+        // בדיקת טעינת הדף
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('הדף נטען בהצלחה!');
+            
+            // בדיקה שהנגן זמין
+            if (typeof YT === 'undefined') {
+                console.error('שגיאה: ספריית YouTube IFrame API לא נטענה!');
+                document.getElementById('playlistName').textContent = '❌ שגיאה בטעינת הנגן';
+            }
+        });
+    </script>
 </body>
+</html>
 </html>
